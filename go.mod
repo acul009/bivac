@@ -19,8 +19,8 @@ require (
 	github.com/tatsushid/go-prettytable v0.0.0-20141013043238-ed2d14c29939
 	golang.org/x/net v0.0.0-20220812174116-3211cb980234
 	gopkg.in/jarcoal/httpmock.v1 v1.0.0-20181117152235-275e9df93516
-	k8s.io/api v0.24.3
-	k8s.io/apimachinery v0.24.3
+	k8s.io/api v0.24.4
+	k8s.io/apimachinery v0.24.4
 	k8s.io/client-go v0.24.3
 )
 
