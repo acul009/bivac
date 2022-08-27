@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 import InfoTable from '../components/InfoTable.vue'
 import VolumeInfo from '../components/VolumeInfo.vue'
 import VolumeBackup from '../components/VolumeBackup.vue'
+import VolumeRestore from '../components/VolumeRestore.vue'
 const route = useRoute()
 
 const id: string = route.params.id as string
@@ -34,6 +35,8 @@ const logRows = ref({})
         <VolumeInfo :id="id"></VolumeInfo>
         <div class="spacer"></div>
         <VolumeBackup :id="id"></VolumeBackup>
+        <div class="spacer"></div>
+        <VolumeRestore :id="id"></VolumeRestore>
     </div>
 </template>
 
