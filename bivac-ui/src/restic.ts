@@ -32,23 +32,52 @@ export default class restic {
         if (res.type !== 'success') {
             return []
         }
-        const lines = atob(res.data).split("\n").map((line) => {
-            return line.split('  ').filter((element) => {
-                return element.length > 0
-            })
+        const lines = atob(res.data).split("\n")
+        let headerLine = lines[0]
+
+        const indices = this.getIndicesFromHeader(headerLine)
+        const parsedHeader = this.splitUsingIndices(headerLine, indices)
+
+        const data = lines.slice(2,-3).map((line) => {
+            return this.splitUsingIndices(line, indices)
         })
-        console.log(lines)
-        const header = lines[0]
-        const data = lines.slice(2,-3)
+
         const table: {[key:string]: string}[] = []
         for(const item of data) {
             const row: {[key:string]: string} = {}
-            for(const [index,col] of header.entries()) {
-                row[col] = item[index]
+            for(const [index,col] of parsedHeader.entries()) {
+                row[col] = typeof item[index] === 'undefined' ? '' : item[index]
             }
             table.push(row)
         }
         return table
+    }
+
+    private getIndicesFromHeader(header: string) {
+        let searchStart = 0
+        const colsIndex: number[] = []
+        while (searchStart >= 0) {
+            let colStart: number = searchStart
+            while (colStart < header.length) {
+                if(header.charAt(colStart++) !== ' ') {
+                    break
+                }
+            }
+            colsIndex.push(colStart -1)
+            searchStart = header.indexOf('  ', colStart)
+        }
+        return colsIndex
+    }
+
+    private splitUsingIndices(line: string, indices: number[]) {
+        const cols = []
+        for(let i = 0; i < indices.length - 1; i++) {
+            cols.push(line.substring(indices[i], indices[i+1]))
+        }
+        cols.push(line.substring(indices[indices.length-1]))
+        return cols.map((col) => {
+            return col.trim()
+        })
     }
 
     public async snapshots(volume: string) {

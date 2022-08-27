@@ -15,14 +15,37 @@ const emit = defineEmits<{
 
 const snapshots: Ref<{[key: string]: string}[]> = ref([])
 
-bivac.autoreload(async () => {
+let autoreload;
+onMounted(() => {
+  autoreload = bivac.autoreload(async () => {
   snapshots.value = await bivac.restic.snapshots(props.id)
-  console.log(snapshots.value)
 })
+})
+onUnmounted(() => {
+  autoreload.cancel()
+})
+
+
 
 </script>
 
 <template>
+  <Table>
+    <Row class="headerRow">
+      <Cell>ID</Cell>
+      <Cell>Time</Cell>
+      <Cell>Host</Cell>
+      <Cell>Tags</Cell>
+      <Cell>Paths</Cell>
+    </Row>
+    <Row v-for="snap of snapshots">
+      <Cell>{{snap.ID}}</Cell>
+      <Cell>{{snap.Time}}</Cell>
+      <Cell>{{snap.Host}}</Cell>
+      <Cell>{{snap.Tags}}</Cell>
+      <Cell>{{snap.Paths}}</Cell>
+    </Row>
+  </Table>
 </template>
 
 <style scoped>
