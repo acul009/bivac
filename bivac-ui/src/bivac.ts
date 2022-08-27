@@ -1,4 +1,5 @@
 import { ref, type Ref } from 'vue'
+import type { MatcherLocationAsPath } from 'vue-router'
 
 class bivac {
     private apiKey: string | null = null
@@ -54,6 +55,32 @@ class bivac {
         return container
     }
 
+    public secondsToReadableTime(seconds: number): string {
+        const roundedSeconds = seconds > 1 ? Math.round(seconds) : 1
+        const minutes = Math.floor(roundedSeconds / 60)
+        const hours = Math.floor(minutes / 60)
+        const days = Math.floor(hours / 24)
+
+        let suffix = 'second'
+        let value = roundedSeconds
+
+        if (days > 0) {
+            value = days
+            suffix = 'day'
+        } else if (hours > 0) {
+            value = hours
+            suffix = 'hour'
+        } else if (minutes > 0) {
+            value = minutes
+            suffix = 'minute'
+        }
+
+        if (value > 1) {
+            suffix += 's'
+        }
+        return value + ' ' + suffix
+    }
+
     public async ping(): Promise<number> {
         const response = await this.api('/ping');
         if (response.status === 200) {
@@ -107,10 +134,6 @@ class bivac {
             }
         )
     }
-
-}
-
-class restic {
 
 }
 

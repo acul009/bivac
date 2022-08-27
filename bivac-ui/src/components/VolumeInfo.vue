@@ -17,28 +17,8 @@ function loadAge() {
 
   const last = new Date(vol.value.LastBackupDate + "Z")
   const seconds = Math.floor((Date.now().valueOf() - last.valueOf())/1000)
-  const minutes = Math.floor(seconds/60)
-  const hours = Math.floor(minutes/60)
-  const days = Math.floor(hours/24)
 
-  let suffix = 'second'
-  let value = seconds
-
-  if(days > 0) {
-    value = days
-    suffix = 'day'
-  } else if (hours > 0) {
-    value = hours
-    suffix = 'hour'
-  }  else if (minutes > 0) {
-    value = minutes
-    suffix = 'minute'
-  }
-
-  if(value > 1) {
-    suffix += 's'
-  }
-  age.value = value + ' ' + suffix
+  age.value = bivac.secondsToReadableTime(seconds)
 }
 const reload = bivac.autoreload(() => {loadAge();})
 onUnmounted(() => {reload.cancel();})
