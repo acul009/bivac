@@ -6,7 +6,7 @@
 
 <style scoped>
 
-.table {
+.cell {
     display: cell;
     vertical-align: middle;
 }
