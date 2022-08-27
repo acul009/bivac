@@ -1,12 +1,15 @@
 import { ref, type Ref } from 'vue'
 import type { MatcherLocationAsPath } from 'vue-router'
+import restic from './restic'
 
-class bivac {
+export class bivac {
     private apiKey: string | null = null
     public volumes: Ref<{ [key: string]: { [key: string]: any } }> = ref({})
+    public restic: restic
 
     constructor() {
         this.autoreload(() => this.loadVolumes())
+        this.restic = new restic(this)
     }
 
     public setApiKey(apiKey: string): void {
@@ -32,8 +35,8 @@ class bivac {
         return await this.api(path).then(res => res.json())
     }
 
-    private async post(path: string, body: string | object | null = null) {
-        return await this.api(path).then(res => res.json())
+    private async post(path: string, body: any = null) {
+        return await this.api(path, 'POST', JSON.stringify(body)).then(res => res.json())
     }
 
     public autoreload(handler: Function) {
@@ -127,7 +130,7 @@ class bivac {
     }
 
     public async rawRestic(volume: string, command: string[]) {
-        this.post(
+        return this.post(
             '/restic/' + encodeURIComponent(volume),
             {
                 cmd: command
