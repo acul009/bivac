@@ -6,6 +6,7 @@ import MenuBar from '../components/MenuBar.vue'
 import { useRoute } from 'vue-router'
 import InfoTable from '../components/InfoTable.vue'
 import VolumeInfo from '../components/VolumeInfo.vue'
+import VolumeLogs from '../components/VolumeLogs.vue'
 import VolumeBackup from '../components/VolumeBackup.vue'
 import VolumeRestore from '../components/VolumeRestore.vue'
 const route = useRoute()
@@ -33,6 +34,8 @@ const logRows = ref({})
     </div>
     <div class="sections" v-else>
         <VolumeInfo :id="id"></VolumeInfo>
+        <div class="spacer"></div>
+        <VolumeLogs :id="id"></VolumeLogs>
         <div class="spacer"></div>
         <VolumeBackup :id="id"></VolumeBackup>
         <div class="spacer"></div>
