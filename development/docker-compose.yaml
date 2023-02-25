@@ -1,0 +1,30 @@
+version: '3.6'
+
+
+
+services:
+  bivac:
+    image: bivac-linux-amd64:dev
+    command: manager -v
+    restart: always
+    ports:
+      - "8182:8182"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      #- "../bivac-ui/dist/index.html:/index.html"
+    environment:
+      RESTIC_FORGET_ARGS: --group-by host --keep-last 10 --keep-daily 15 --keep-monthly 12 --keep-yearly 10 --prune
+      AWS_ACCESS_KEY_ID: "AKIAIOSFODNN7EXAMPLE"
+      AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+      RESTIC_PASSWORD: supersecretpassword
+      BIVAC_TARGET_URL: s3:http://192.168.44.112:9000/bivac-test
+      BIVAC_SERVER_PSK: supersecrettoken
+      BIVAC_AGENT_IMAGE: bivac-linux-amd64:dev
+      BIVAC_VERBOSE: 1
+      BIVAC_REMOTE_ADDRESS: http://192.168.44.112:8182
+
+  s3ninja:
+    image: scireum/s3-ninja
+    ports:
+      - 9000:9000 
+
